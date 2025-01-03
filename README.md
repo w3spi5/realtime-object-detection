@@ -1,1 +1,32 @@
-IyBBcHBsaWNhdGlvbiBkZSBEw6l0ZWN0aW9uIGQnT2JqZXRzIGVuIFRlbXBzIFLDqWVsCgpDZXR0ZSBhcHBsaWNhdGlvbiB1dGlsaXNlIFRlbnNvckZsb3cuanMgZXQgbGUgbW9kw6hsZSBDT0NPLVNTRCBwb3VyIGTDqXRlY3RlciBkZXMgb2JqZXRzIGVuIHRlbXBzIHLDqWVsIHZpYSBsYSBjYW3DqXJhIGQndW4gaVBob25lLgoKIyMgQ2FyYWN0w6lyaXN0aXF1ZXMKCi0gVXRpbGlzYXRpb24gZGUgbGEgY2Ftw6lyYSBhcnJpw6hyZSBkZSBsJ2lQaG9uZQotIETDqXRlY3Rpb24gZCdvYmpldHMgZW4gdGVtcHMgcsOpZWwKLSBJbnRlcmZhY2UgcmVzcG9uc2l2ZSBldCBtb2Rlcm5lCi0gR2VzdGlvbiBvcHRpbWlzw6llIGRlcyBwZXJmb3JtYW5jZXMKCiMjIEluc3RhbGxhdGlvbgoKMS4gQ2xvbmV6IGxlIHJlcG9zaXRvcnkKMi4gRMOpcGxveWV6IHN1ciB1biBzZXJ2ZXVyIEhUVFBTCjMuIEFjY8OpZGV6IHZpYSBTYWZhcmkgc3VyIGlQaG9uZQoKIyMgRMOpdmVsb3BwZW1lbnQKCi0gQnJhbmNoZSBgbWFpbmA6IHByb2R1Y3Rpb24KLSBCcmFuY2hlIGBkZXZlbG9wYDogZMOpdmVsb3BwZW1lbnQKLSBCcmFuY2hlcyBgZmVhdHVyZS8qYDogbm91dmVsbGVzIGZvbmN0aW9ubmFsaXTDqXMKCiMjIENvbnRyaWJ1dGlvbgoKMS4gQ3LDqWV6IHVuZSBicmFuY2hlIGRlcHVpcyBgZGV2ZWxvcGAKMi4gRMOpdmVsb3BwZXogbGEgZm9uY3Rpb25uYWxpdMOpCjMuIFNvdW1ldHRleiB1bmUgUHVsbCBSZXF1ZXN0CgojIyBMaWNlbmNlCgpNSVQ=
+# Application de Détection d'Objets en Temps Réel
+
+Cette application utilise TensorFlow.js et le modèle COCO-SSD pour détecter des objets en temps réel via la caméra d'un iPhone.
+
+## Caractéristiques
+
+- Utilisation de la caméra arrière de l'iPhone
+- Détection d'objets en temps réel
+- Interface responsive et moderne
+- Gestion optimisée des performances
+
+## Installation
+
+1. Clonez le repository
+2. Déployez sur un serveur HTTPS
+3. Accédez via Safari sur iPhone
+
+## Développement
+
+- Branche `main`: production
+- Branche `develop`: développement
+- Branches `feature/*`: nouvelles fonctionnalités
+
+## Contribution
+
+1. Créez une branche depuis `develop`
+2. Développez la fonctionnalité
+3. Soumettez une Pull Request
+
+## Licence
+
+MIT
