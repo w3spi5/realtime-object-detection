@@ -1,0 +1,25 @@
+{
+  "name": "realtime-object-detection",
+  "version": "1.0.0",
+  "description": "Cette application utilise TensorFlow.js et le modèle COCO-SSD pour détecter des objets en temps réel via la caméra d'un iPhone.",
+  "main": "eslint.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/w3spi5/realtime-object-detection.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/w3spi5/realtime-object-detection/issues"
+  },
+  "homepage": "https://github.com/w3spi5/realtime-object-detection#readme",
+  "devDependencies": {
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2"
+  }
+}
