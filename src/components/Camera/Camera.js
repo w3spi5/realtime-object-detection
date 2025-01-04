@@ -1,3 +1,5 @@
+import { CONFIG } from '../../services/config';
+
 class Camera {
     constructor() {
         this.video = document.getElementById('video');
