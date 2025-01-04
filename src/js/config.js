@@ -1,4 +1,4 @@
-const CONFIG = {
+export const CONFIG = {
     camera: {
         video: {
             facingMode: 'environment',

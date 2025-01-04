@@ -1,4 +1,5 @@
-class Camera {
+import { CONFIG } from './config.js';
+export class Camera {
     constructor() {
         this.video = document.getElementById('video');
         this.canvas = document.getElementById('canvas');
