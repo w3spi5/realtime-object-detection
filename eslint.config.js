@@ -1,23 +1,28 @@
-import eslint from "@eslint/js";
-import globals from "globals";
+const globals = require("globals");
 
-export default [
-  eslint.configs.recommended,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        CONFIG: "readonly",
-        cocoSsd: "readonly"
-      },
-      ecmaVersion: 2022,
-      sourceType: "module",
-    },
-    rules: {
-      "no-unused-vars": "warn",
-      "no-console": ["warn", { allow: ["error", "warn"] }],
-      "quotes": ["error", "single"],
-      "semi": ["error", "always"]
-    },
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+    node: true
   },
-];
+  extends: [
+    "eslint:recommended",
+    "prettier"
+  ],
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module"
+  },
+  globals: {
+    AudioWorkletGlobalScope: "readonly",
+    tf: "readonly",
+    cocoSsd: "readonly"
+  },
+  rules: {
+    "no-unused-vars": "warn",
+    "no-console": ["warn", { allow: ["error", "warn"] }],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"]
+  }
+};
