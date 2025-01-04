@@ -1,3 +1,8 @@
+import './styles/main.css';
+import { Camera } from './components/Camera/Camera';
+import { ObjectDetector } from './services/detection';
+import { CONFIG } from './services/config';
+
 class App {
     constructor() {
         this.status = document.getElementById('status');
