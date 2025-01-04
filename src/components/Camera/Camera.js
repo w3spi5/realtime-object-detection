@@ -1,6 +1,6 @@
 import { CONFIG } from '../../services/config';
 
-class Camera {
+export class Camera {
     constructor() {
         this.video = document.getElementById('video');
         this.canvas = document.getElementById('canvas');

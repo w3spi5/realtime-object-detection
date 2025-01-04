@@ -1,7 +1,6 @@
-import './styles/main.css';
+import './app.css';
 import { Camera } from './components/Camera/Camera';
 import { ObjectDetector } from './services/detection';
-import { CONFIG } from './services/config';
 
 class App {
     constructor() {

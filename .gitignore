@@ -6,6 +6,7 @@ node_modules/
 .vscode/
 *.swp
 *.swo
+dist/
 
 # OS
 .DS_Store

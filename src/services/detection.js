@@ -1,4 +1,6 @@
-class ObjectDetector {
+import { CONFIG } from './config';
+
+export class ObjectDetector {
     constructor(camera) {
         this.camera = camera;
         this.model = null;
