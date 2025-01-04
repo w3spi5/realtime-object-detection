@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrealtime_object_detection=self.webpackChunkrealtime_object_detection||[]).push([[792],{876:(e,t,a)=>{a.a(e,(async(e,t)=>{try{await window.fs.readFile("js/app.js","utf8"),t()}catch(e){t(e)}}),1)}},e=>{e(e.s=876)}]);
