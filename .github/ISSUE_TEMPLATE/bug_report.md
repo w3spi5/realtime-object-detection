@@ -1,30 +1,41 @@
 ---
-name: Bug report
-about: Créer un rapport de bug
+name: 🐞 Bug Report
+about: Create a bug report for the project
 title: "[Bug] "
 labels: bug
 ---
 
-## Description du bug
-[Description claire et concise du bug]
+## 🐛 Bug Description
+🔹 **Provide a clear and concise description of the bug.**
 
-## Pour reproduire
-Étapes pour reproduire le comportement :
-1. Aller à '...'
-2. Cliquer sur '...'
-3. Défiler jusqu'à '...'
-4. Voir l'erreur
+---
 
-## Comportement attendu
-[Description claire et concise de ce que vous attendiez]
+## 🔁 Steps to Reproduce
+Steps to reproduce the behavior:
 
-## Captures d'écran
-[Si applicable, ajoutez des captures d'écran]
+1. 📌 **Go to** '...'  
+2. 📌 **Click on** '...'  
+3. 📌 **Scroll to** '...'  
+4. 📌 **See the error.**
 
-## Environnement
- - OS: [ex: iOS]
- - Navigateur: [ex: Safari]
- - Version: [ex: 22]
+---
 
-## Informations supplémentaires
-[Ajoutez tout autre contexte sur le problème ici]
+## 🎯 Expected Behavior
+✅ **Provide a clear and concise description of what you expected to happen.**
+
+---
+
+## 📷 Screenshots
+🖼️ **If applicable, add screenshots to help explain the issue.**
+
+---
+
+## 🖥️ Environment
+- **🖥️ OS:** [e.g., iOS]  
+- **🌐 Browser:** [e.g., Safari]  
+- **📦 Version:** [e.g., 22]
+
+---
+
+## 📎 Additional Information
+💡 **Add any other context or information related to the bug here.**

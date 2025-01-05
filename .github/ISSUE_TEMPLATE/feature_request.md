@@ -1,22 +1,28 @@
 ---
-name: Feature request
-about: Suggérer une nouvelle fonctionnalité
+name: 🌟 Feature Request
+about: Suggest a new feature for the project
 title: "[Feature] "
 labels: enhancement
 ---
 
-## Objectif
-[Description claire et concise de la fonctionnalité souhaitée]
+## 🎯 Objective
+🔹 **Clear and concise description of the desired feature.**
 
-## Tâches
-- [ ] Tâche 1
-- [ ] Tâche 2
-- [ ] Tâche 3
+---
 
-## Critères d'acceptation
-- Critère 1
-- Critère 2
-- Critère 3
+## ✅ Tasks
+- [ ] 📌 **Task 1**  
+- [ ] 📌 **Task 2**  
+- [ ] 📌 **Task 3**  
 
-## Informations supplémentaires
-[Tout contexte ou capture d'écran supplémentaire]
+---
+
+## 📊 Acceptance Criteria
+- ✅ **Criterion 1**  
+- ✅ **Criterion 2**  
+- ✅ **Criterion 3**  
+
+---
+
+## 📎 Additional Information
+💡 **Provide any additional context, screenshots, or links if necessary.**

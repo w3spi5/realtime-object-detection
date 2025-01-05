@@ -1,34 +1,45 @@
-# Application de Détection d'Objets en Temps Réel
+# 🌟 Real-Time Object Detection App
 
-Une application web progressive qui permet la détection d'objets en temps réel via la caméra de votre smartphone, en utilisant TensorFlow.js et le modèle COCO-SSD.
+A **Progressive Web Application (PWA)** for real-time object detection using your smartphone camera, powered by **TensorFlow.js** and the **COCO-SSD** model.
 
-## Caractéristiques
+## 🚀 Features
 
-- Détection d'objets en temps réel via la caméra du smartphone
-- Support de multiples navigateurs (Safari, Chrome, Firefox)
-- Interface responsive et intuitive
-- Mode plein écran pour une meilleure expérience
-- Gestion optimisée des performances
-- Support hors ligne (PWA)
+- 📷 **Real-time object detection** via smartphone camera
+- 🌐 **Cross-browser support** (Safari, Chrome, Firefox)
+- 📱 **Responsive and intuitive** design
+- 🖥️ **Fullscreen mode** for enhanced experience
+- ⚡ **Optimized performance management**
+- 📶 **Offline support** (PWA)
 
-## Prérequis
+---
 
-- Un smartphone avec une caméra
-- Un navigateur web moderne supportant WebRTC
-- Une connexion HTTPS (requis pour l'accès à la caméra)
+## ✅ Requirements
 
-## Développement
+- 📲 A smartphone with a camera
+- 🌍 A modern web browser supporting WebRTC
+- 🔒 **HTTPS connection** (required for camera access)
 
-- Branche `main`: production
-- Branche `develop`: développement
-- Branches `feature/*`: nouvelles fonctionnalités
+---
 
-## Contribution
+## 🛠️ Development Workflow
 
-1. Créez une branche depuis `develop`
-2. Développez la fonctionnalité
-3. Soumettez une Pull Request
+- **`main` branch:** Production-ready code
+- **`develop` branch:** Development work in progress
+- **`feature/*` branches:** New feature development
 
-## Licence
+---
 
-The MIT [License](LICENSE)
+## 🤝 Contributing
+
+Contribute to improve the app! Here's how:
+
+1. 🌿 Create a branch from `develop`.
+2. 💡 Develop your feature.
+3. 📩 Submit a Pull Request.
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.  
+🔗 [Read the License Here](LICENSE)
