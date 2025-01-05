@@ -21,20 +21,7 @@ export default {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env', {
-                targets: {
-                  node: 'current'
-                },
-                modules: false
-              }]
-            ],
-            plugins: ['@babel/plugin-syntax-top-level-await']
-          }
-        }
+        use: 'babel-loader'
       },
       {
         test: /\.css$/,

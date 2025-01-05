@@ -6,12 +6,16 @@ export default {
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   transform: {
-    '^.+\\.(js|jsx)$': ['babel-jest', {
-      presets: [['@babel/preset-env', { targets: { node: 'current' }}]],
-      plugins: ['@babel/plugin-transform-modules-commonjs']
-    }]
+    '^.+\\.(js|jsx)$': 'babel-jest'
   },
+  transformIgnorePatterns: [
+    '/node_modules/(?!(@tensorflow|@tensorflow-models)/)(?!canvas)'
+  ],
+  modulePathIgnorePatterns: ['node_modules/canvas'],
   moduleDirectories: ['node_modules', 'src'],
   testMatch: ['**/__tests__/**/*.test.js'],
-  verbose: true
-};
+  verbose: true,
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons']
+  }
+}
