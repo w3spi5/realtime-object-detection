@@ -1,49 +1,63 @@
+import { Camera } from './js/camera.js';
+import { ObjectDetector } from './js/detection.js';
 import './app.css';
-import { Camera } from './components/Camera/Camera';
-import { ObjectDetector } from './services/detection';
 
 class App {
     constructor() {
-        this.status = document.getElementById('status');
+        this.statusElement = document.getElementById('status');
         this.camera = new Camera();
         this.detector = new ObjectDetector(this.camera);
+        this.isRunning = false;
     }
 
-    setStatus(message, isError = false) {
-        this.status.textContent = message;
-        this.status.classList.toggle('error', isError);
-    }
-
-    async init() {
+    async initialize() {
         try {
-            this.setStatus('Initialisation de la caméra...');
+            this.updateStatus('Initialisation de la caméra...');
             await this.camera.setup();
 
-            this.setStatus('Chargement du modèle...');
+            this.updateStatus('Chargement du modèle...');
             await this.detector.loadModel();
 
-            this.setStatus('Prêt !');
+            this.updateStatus('Prêt !');
             this.startDetection();
         } catch (error) {
-            this.setStatus(error.message, true);
-            console.error('Erreur d\'initialisation:', error);
+            this.updateStatus(`Erreur: ${error.message}`, true);
+            console.error(error);
         }
     }
 
+    updateStatus(message, isError = false) {
+        this.statusElement.textContent = message;
+        this.statusElement.className = isError ? 'status error' : 'status';
+    }
+
     async startDetection() {
-        const detect = async () => {
-            const predictions = await this.detector.detect();
-            if (predictions) {
+        if (this.isRunning) return;
+        this.isRunning = true;
+
+        const detectFrame = async () => {
+            if (!this.isRunning) return;
+
+            try {
+                const predictions = await this.detector.detect();
                 this.detector.drawPredictions(predictions);
+            } catch (error) {
+                console.error('Erreur de détection:', error);
             }
-            requestAnimationFrame(detect);
+
+            requestAnimationFrame(detectFrame);
         };
 
-        detect();
+        detectFrame();
+    }
+
+    stopDetection() {
+        this.isRunning = false;
     }
 }
 
+// Initialiser l'application quand le DOM est chargé
 document.addEventListener('DOMContentLoaded', () => {
     const app = new App();
-    app.init();
+    app.initialize();
 });

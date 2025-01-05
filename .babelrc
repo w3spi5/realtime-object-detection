@@ -1,3 +1,13 @@
 {
+<<<<<<< HEAD
   "presets": ["@babel/preset-env"]
+=======
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "node": "current"
+      }
+    }]
+  ]
+>>>>>>> 6596b6f7072303ba0bf4f7705cf6d125fe356082
 }

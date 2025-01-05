@@ -1,24 +1,29 @@
-// eslint.config.js
-const globals = require("globals");
+import globals from 'globals';
+import js from '@eslint/js';
 
-module.exports = [
+export default [
+  js.configs.recommended,
   {
+    files: ['**/*.js'],
+    ignores: ['dist/**', 'node_modules/**'],
     languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: "module",
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       globals: {
         ...globals.browser,
-        CONFIG: "readonly",
-        cocoSsd: "readonly"
-      }
+        ...globals.node,
+        ...globals.jest,
+        AudioWorkletGlobalScope: 'readonly',
+        tf: 'readonly',
+        cocoSsd: 'readonly',
+        CONFIG: 'readonly'
+      },
     },
-    files: ["src/**/*.js"],
     rules: {
-      "no-unused-vars": "warn",
-      "no-console": ["warn", { allow: ["error", "warn"] }],
-      "quotes": ["error", "single"],
-      "semi": ["error", "always"]
-    },
-    ignores: ["dist/**/*", "node_modules/**/*"]
+      'no-unused-vars': 'warn',
+      'no-console': ['warn', { allow: ['error', 'warn'] }],
+      'quotes': ['error', 'single'],
+      'semi': ['error', 'always']
+    }
   }
 ];

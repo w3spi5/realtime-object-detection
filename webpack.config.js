@@ -1,13 +1,20 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-module.exports = {
-  mode: 'production',
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
   entry: './src/app.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
+    filename: 'js/[name].[contenthash].js',
     clean: true,
+  },
+  experiments: {
+    topLevelAwait: true
   },
   module: {
     rules: [
@@ -17,24 +24,66 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: [
+              ['@babel/preset-env', {
+                targets: {
+                  node: 'current'
+                },
+                modules: false
+              }]
+            ],
+            plugins: ['@babel/plugin-syntax-top-level-await']
           }
         }
       },
       {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
       }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true
+      }
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash].css'
     })
   ],
   resolve: {
-    extensions: ['.js', '.css']
+    extensions: ['.js', '.css'],
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    }
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      minSize: 0,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+            return `vendor.${packageName.replace('@', '')}`;
+          },
+        },
+      },
+    },
+    runtimeChunk: 'single',
   },
   devServer: {
     static: {
@@ -42,6 +91,10 @@ module.exports = {
     },
     compress: true,
     port: 9000,
-    hot: true
+    hot: true,
+    open: true
+  },
+  performance: {
+    hints: false
   }
 };
