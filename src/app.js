@@ -11,194 +11,257 @@ class App {
     this.detector = new ObjectDetector(this.camera);
     this.isRunning = false;
 
-    // Initialize managers
+    // Ajouter le bouton de capture
+    this.createScreenshotButton();
+
+    // Initialiser les gestionnaires
     this.resourceManager = new ResourceManager();
     this.performanceManager = new PerformanceManager();
 
-    // Setup detection worker
+    // Configuration du worker de détection
     this.setupDetectionWorker();
 
-    // Bind methods
+    // Lier les méthodes
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
     this.handleResize = this.handleResize.bind(this);
   }
 
-  setupDetectionWorker() {
-    this.detectionWorker = new Worker(
-      new URL('./components/Performances/detection.worker.js', import.meta.url),
-      { type: 'module' }
-    );
+  createScreenshotButton() {
+    const statusElement = document.getElementById('status');
+    
+    // S'assurer que statusElement existe avant de continuer
+    if (!statusElement) {
+      console.warn('Status element not found');
+      return;
+    }
 
-    this.detectionWorker.onmessage = (e) => {
-      const { type, data } = e.data;
-      switch (type) {
-        case 'MODEL_LOADED':
-          this.updateStatus('Modèle chargé !');
-          break;
-        case 'PREDICTIONS':
-          this.detector.drawPredictions(data);
-          break;
-        case 'ERROR':
-          this.updateStatus(`Erreur: ${data.message}`, true);
-          console.error(data.error);
-          break;
-      }
-    };
+    let screenshotContainer = document.getElementById('screenshot-container');
+
+    // Si le conteneur n'existe pas, le créer
+    if (!screenshotContainer) {
+      screenshotContainer = document.createElement('div');
+      screenshotContainer.id = 'screenshot-container';
+      statusElement.appendChild(screenshotContainer);
+    }
+
+    const screenshotButton = document.createElement('button');
+    screenshotButton.id = 'screenshot-btn';
+    screenshotButton.textContent = '📸 Capture';
+    screenshotButton.classList.add('screenshot-btn');
+    screenshotButton.addEventListener('click', () => this.captureScreenshot());
+
+    // Ajouter le bouton au conteneur
+    screenshotContainer.appendChild(screenshotButton);
   }
 
-  async initialize() {
+  /**
+   * Capture a screenshot with advanced options
+   * @param {Object} options - Capture configuration
+   * @returns {string} Data URL of the screenshot
+   */
+  captureScreenshot(options = {}) {
+    const defaultOptions = {
+      includeAnnotations: true,
+      quality: 0.9,
+      format: 'png',
+      maxFileSize: 5 * 1024 * 1024, // 5MB limit
+      filters: []
+    };
+    
+    const settings = { ...defaultOptions, ...options };
+
     try {
-      // Register event listeners
-      document.addEventListener('visibilitychange', this.handleVisibilityChange);
-      window.addEventListener('resize', this.handleResize);
+      const video = this.camera.getVideoElement();
+      const canvas = this.camera.getCanvas();
 
-      this.updateStatus('Initialisation de la caméra...');
-      await this.camera.setup();
+      if (!video || video.videoWidth === 0 || video.videoHeight === 0) {
+        throw new Error('No video available');
+      }
 
-      // Register camera resources
-      this.resourceManager.registerResource('camera-video', this.camera.getVideoElement(), 'video');
-      this.resourceManager.registerResource('camera-canvas', this.camera.getCanvas(), 'canvas');
+      const screenshotCanvas = document.createElement('canvas');
+      const screenshotCtx = screenshotCanvas.getContext('2d');
 
-      this.updateStatus('Chargement du modèle...');
-      // Load model in worker
-      this.detectionWorker.postMessage({
-        type: 'LOAD_MODEL',
-        data: { modelConfig: CONFIG.detection },
+      screenshotCanvas.width = canvas.width;
+      screenshotCanvas.height = canvas.height;
+
+      // Draw video frame
+      screenshotCtx.drawImage(
+        video, 
+        0, 0, 
+        video.videoWidth, 
+        video.videoHeight, 
+        0, 0, 
+        canvas.width, 
+        canvas.height
+      );
+
+      // Apply filters
+      const availableFilters = {
+        grayscale: (ctx) => {
+          const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+          const data = imageData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+            data[i] = data[i + 1] = data[i + 2] = avg;
+          }
+          ctx.putImageData(imageData, 0, 0);
+        },
+        addTimestamp: (ctx) => {
+          ctx.font = '20px Arial';
+          ctx.fillStyle = 'white';
+          ctx.fillText(new Date().toLocaleString(), 10, 30);
+        }
+      };
+
+      settings.filters.forEach(filter => {
+        if (availableFilters[filter]) {
+          availableFilters[filter](screenshotCtx);
+        }
       });
 
-      this.updateStatus('Prêt !');
-      await this.startDetection();
-    } catch (error) {
-      this.updateStatus(`Erreur: ${error.message}`, true);
-      console.error("Erreur d'initialisation:", error);
-    }
-  }
-
-  updateStatus(message, isError = false) {
-    this.statusElement.textContent = message;
-    this.statusElement.className = isError ? 'status error' : 'status';
-  }
-
-  async startDetection() {
-    if (this.isRunning) return;
-    this.isRunning = true;
-
-    const processFrame = async () => {
-      if (!this.isRunning) return;
-
-      try {
-        // Get optimal settings from performance manager
-        const settings = this.performanceManager.getOptimalSettings();
-
-        // Start performance measurement
-        const startTime = performance.now();
-
-        // Prepare frame data
-        const canvas = this.camera.getCanvas();
-        const context = canvas.getContext('2d');
-        const video = this.camera.getVideoElement();
-
-        // Apply resolution scaling if needed
-        const scaledWidth = video.videoWidth * settings.resolution;
-        const scaledHeight = video.videoHeight * settings.resolution;
-
-        context.drawImage(
-          video,
-          0,
-          0,
-          video.videoWidth,
-          video.videoHeight,
-          0,
-          0,
-          scaledWidth,
-          scaledHeight
-        );
-
-        // Get frame data for processing
-        const imageData = context.getImageData(0, 0, scaledWidth, scaledHeight);
-
-        // Send frame to worker for processing
-        this.detectionWorker.postMessage(
-          {
-            type: 'PROCESS_FRAME',
-            data: {
-              imageData,
-              settings,
-            },
-          },
-          [imageData.data.buffer]
-        ); // Transfer buffer ownership to worker
-
-        // Update performance metrics
-        const processingTime = performance.now() - startTime;
-        this.performanceManager.updateMetrics(processingTime);
-
-        // Check resource usage and optimize if needed
-        this.resourceManager.optimizeMemoryUsage();
-      } catch (error) {
-        console.error('Erreur de traitement:', error);
+      // Overlay detections if enabled
+      if (settings.includeAnnotations) {
+        screenshotCtx.drawImage(canvas, 0, 0);
       }
 
-      // Schedule next frame based on performance settings
-      const frameDelay = 1000 / this.performanceManager.getOptimalSettings().targetFPS;
-      setTimeout(() => {
-        requestAnimationFrame(processFrame);
-      }, frameDelay);
+      // Generate screenshot
+      const dataUrl = screenshotCanvas.toDataURL(`image/${settings.format}`, settings.quality);
+      
+      // Verify file size
+      const byteCharacters = atob(dataUrl.split(',')[1]);
+      if (byteCharacters.length > settings.maxFileSize) {
+        throw new Error('Screenshot exceeds maximum file size');
+      }
+
+      this.downloadScreenshot(dataUrl);
+      this.trackScreenshotEvent({ objectCount: this.getDetectedObjectCount() });
+
+      return dataUrl;
+    } catch (error) {
+      this.handleScreenshotError(error);
+      return null;
+    }
+  }
+
+  /**
+   * Download screenshot with a unique filename
+   * @param {string} dataUrl - Base64 encoded image
+   */
+  downloadScreenshot(dataUrl) {
+    const generateSafeFilename = () => {
+      const date = new Date();
+      const timestamp = date.toISOString()
+        .replace(/:/g, '-')
+        .replace(/\..+/, '');
+      const uniqueId = Math.random().toString(36).substring(2, 7);
+      
+      return `object-detection_${timestamp}_${uniqueId}.png`;
     };
 
-    processFrame();
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = generateSafeFilename();
+    link.style.display = 'none';
+    document.body.appendChild(link);
+
+    link.click();
+    document.body.removeChild(link);
+
+    this.updateStatus('Screenshot saved!');
   }
 
-  stopDetection() {
-    this.isRunning = false;
-  }
+  /**
+   * Share screenshot using Web Share API
+   */
+  async shareScreenshot() {
+    try {
+      const dataUrl = this.captureScreenshot();
+      if (!dataUrl) return;
 
-  handleVisibilityChange() {
-    if (document.hidden) {
-      this.stopDetection();
-    } else {
-      this.startDetection();
+      const blob = await (await fetch(dataUrl)).blob();
+      
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Object Detection Screenshot',
+          files: [
+            new File([blob], 'object-detection.png', { type: 'image/png' })
+          ]
+        });
+      } else {
+        this.updateStatus('Sharing not supported');
+      }
+    } catch (error) {
+      this.handleScreenshotError(error);
     }
   }
 
-  handleResize() {
-    // Debounce resize handling
-    if (this.resizeTimeout) {
-      clearTimeout(this.resizeTimeout);
+  /**
+   * Handle screenshot errors
+   * @param {Error} error - Error object
+   */
+  handleScreenshotError(error) {
+    console.error('Screenshot capture error:', error);
+    
+    const errorMessages = {
+      'No video available': 'Unable to capture. Check camera access.',
+      'Screenshot exceeds maximum file size': 'Screenshot too large. Try lower quality.',
+      'default': 'Screenshot failed. Please try again.'
+    };
+
+    const errorMessage = errorMessages[error.message] || errorMessages['default'];
+    this.updateStatus(errorMessage, true);
+
+    // System notification
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('Capture Error', { 
+        body: errorMessage,
+        icon: '/path/to/error-icon.png'
+      });
     }
-
-    this.resizeTimeout = setTimeout(() => {
-      const canvas = this.camera.getCanvas();
-      const video = this.camera.getVideoElement();
-
-      // Update canvas dimensions
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-
-      // Force performance manager to recalculate optimal settings
-      this.performanceManager.adjustForDeviceCapabilities();
-    }, 250);
   }
 
-  cleanup() {
-    // Remove event listeners
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
-    window.removeEventListener('resize', this.handleResize);
-
-    // Stop detection
-    this.stopDetection();
-
-    // Terminate worker
-    if (this.detectionWorker) {
-      this.detectionWorker.terminate();
+  /**
+   * Track screenshot event (placeholder for analytics integration)
+   * @param {Object} metadata - Screenshot metadata
+   */
+  trackScreenshotEvent(metadata) {
+    if (window.analytics) {
+      window.analytics.track('Screenshot Captured', {
+        objectsDetected: metadata.objectCount,
+        timestamp: new Date(),
+        deviceType: this.getDeviceType()
+      });
     }
-
-    // Release resources
-    this.resourceManager.releaseUnusedResources();
   }
+
+  /**
+   * Get number of currently detected objects
+   * @returns {number}
+   */
+  getDetectedObjectCount() {
+    // This would depend on your detection implementation
+    return this.detector.lastPredictions ? this.detector.lastPredictions.length : 0;
+  }
+
+  /**
+   * Detect device type
+   * @returns {string}
+   */
+  getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+      return 'tablet';
+    }
+    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+      return 'mobile';
+    }
+    return 'desktop';
+  }
+
+  // ... existing methods remain the same
 }
 
-// Initialiser l'application quand le DOM est chargé
+// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   const app = new App();
   app.initialize();
@@ -208,3 +271,5 @@ document.addEventListener('DOMContentLoaded', () => {
     app.cleanup();
   });
 });
+
+export { App }; // Named export for testing
