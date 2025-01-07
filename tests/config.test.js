@@ -1,4 +1,4 @@
-import { CONFIG } from '../../js/config';
+import { CONFIG } from '../src/js/config.js'; 
 
 describe('Config', () => {
   it('should have camera configuration', () => {

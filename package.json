@@ -2,7 +2,7 @@
   "name": "realtime-object-detection",
   "version": "1.0.0",
   "type": "module",
-  "description": "Application web progressive de détection d'objets en temps réel utilisant TensorFlow.js et le modèle COCO-SSD, accessible depuis n'importe quel smartphone via le navigateur.",
+  "description": "Real-time object detection progressive web application using TensorFlow.js and the COCO-SSD model, accessible from any smartphone via the browser.",
   "main": "src/app.js",
   "scripts": {
     "start": "webpack serve --mode development",
@@ -57,6 +57,7 @@
     "html-webpack-plugin": "^5.6.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^25.0.1",
     "mini-css-extract-plugin": "^2.9.2",
     "prettier": "^3.4.2",
     "style-loader": "^3.3.4",

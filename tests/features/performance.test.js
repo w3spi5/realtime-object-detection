@@ -1,15 +1,6 @@
-import { ObjectDetector } from '../../../js/detection';
-import { ResourceManager } from '../../../components/Performances/ResourceManager';
-import { PerformanceManager } from '../../../components/Performances/PerformanceManager';
-
-const mockCanvas = {
-  width: 1280,
-  height: 720,
-  getContext: () => ({
-    drawImage: jest.fn(),
-    clearRect: jest.fn(),
-  }),
-};
+import { ObjectDetector } from '../../src/js/detection';
+import { ResourceManager } from '../../src/components/Performances/ResourceManager';
+import { PerformanceManager } from '../../src/components/Performances/PerformanceManager';
 
 const mockCamera = {
   getVideoElement: () => ({
@@ -17,11 +8,21 @@ const mockCamera = {
     videoHeight: 720,
     play: jest.fn(),
   }),
-  getCanvas: () => mockCanvas,
-  getContext: () => mockCanvas.getContext(),
+  getCanvas: () => ({
+    width: 1280,
+    height: 720,
+    getContext: () => ({
+      drawImage: jest.fn(),
+      clearRect: jest.fn(),
+    }),
+  }),
+  getContext: () => ({
+    drawImage: jest.fn(),
+    clearRect: jest.fn(),
+  })
 };
 
-jest.mock('../../../js/camera', () => ({
+jest.mock('../../src/js/camera', () => ({
   Camera: jest.fn().mockImplementation(() => mockCamera),
 }));
 

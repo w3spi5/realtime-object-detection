@@ -1,8 +1,9 @@
 export default {
   testEnvironment: 'jsdom',
+  setupFiles: ['jest-jsdom-global'], // Ajoutez cette ligne
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js'
+    '\\.(css|less|scss|sass)$': '<rootDir>/mocks/styleMock.js',
+    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/mocks/fileMock.js'
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   transform: {
@@ -13,7 +14,7 @@ export default {
   ],
   modulePathIgnorePatterns: ['node_modules/canvas'],
   moduleDirectories: ['node_modules', 'src'],
-  testMatch: ['**/__tests__/**/*.test.js'],
+  testMatch: ['**/tests/**/*.test.js'],
   verbose: true,
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons']
