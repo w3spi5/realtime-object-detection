@@ -39,7 +39,7 @@
   "homepage": "https://github.com/w3spi5/realtime-object-detection#readme",
   "dependencies": {
     "@tensorflow-models/coco-ssd": "^2.2.3",
-    "@tensorflow/tfjs": "^4.15.0"
+    "@tensorflow/tfjs": "^4.22.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",

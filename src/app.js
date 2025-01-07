@@ -1,3 +1,7 @@
+// Imports TensorFlow et COCO-SSD
+import * as tf from '@tensorflow/tfjs';
+import * as cocoSsd from '@tensorflow-models/coco-ssd';
+
 import { Camera } from './js/camera.js';
 import { ObjectDetector } from './js/detection.js';
 import { ResourceManager } from './components/Performances/ResourceManager.js';
