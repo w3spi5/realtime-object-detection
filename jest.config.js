@@ -1,6 +1,5 @@
 export default {
   testEnvironment: 'jsdom',
-  setupFiles: ['jest-jsdom-global'], // Ajoutez cette ligne
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': '<rootDir>/mocks/styleMock.js',
     '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/mocks/fileMock.js'

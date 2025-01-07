@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+test-workflows.ps1

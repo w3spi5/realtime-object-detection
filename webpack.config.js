@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -81,7 +82,16 @@ export default {
     compress: true,
     port: 9000,
     hot: true,
-    open: true
+    open: true,
+    host: '0.0.0.0',
+    server: {
+      type: 'https',
+      options: {
+        key: fs.readFileSync('cert.key'),
+        cert: fs.readFileSync('cert.crt'),
+        ca: fs.readFileSync('ca.crt')
+      }
+    }
   },
   performance: {
     hints: false
